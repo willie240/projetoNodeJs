@@ -2,8 +2,6 @@
 const express = require('express')
 const app = express()
 
-const cors = require("cors")
-app.use(cors())
 
 //Importing Sequeleze
 const { Sequelize, DataTypes } = require('sequelize')
@@ -30,108 +28,61 @@ app.get('', (req, res) => {
 })
 
 // Listing products by using GET
-app.get('/products', async (req, res) => {
-    const allProducts = await products.findAll()
+app.get('/task', async (req, res) => {
+    const allTask = await task.findAll()
 
     // Usando SQLite puro
     // const allTasks = await sequelize.query('SELECT * FROM Tasks')
 
-    res.json({ action: 'Listing Products', product: allProducts })
+    res.json({ action: 'Lista de tarefas', product: allTask })
 })
 
 // Show a specific product using GET
-app.get('/products/:id', async (req, res) => {
+app.get('/task/:id', async (req, res) => {
 
-    const productId = req.params.id
-    const product = await products.findByPk(productId)
-    res.send({ action: 'Showing Product', product: product })
+    const taskId = req.params.id
+    const task = await task.findByPk(taskId)
+    res.send({ action: 'Procurando tarefa', tarefas: task })
 })
 
 // Creating a products by using POST
-app.post('/products', async (req, res) => {
+app.post('/task', async (req, res) => {
     const body = req.body
 
-    const newProduct = await products.create({
+    const newTask = await task.create({
 
         name: body.name,
-        description: body.description,
-        quantity: body.quantity,
-        price: body.price,
-        urlimg: body.urlimg,
-        nonmeat: body.nonmeat,
-        protein: body.protein,
-        sauce: body.sauce,
-        potatoes: body.potatoes,
-        drink: body.drink
+        descricao: body.descricao,
+        realizada: body.realizada
+        
     })
 
-    res.json({ action: 'New Product Added', product: newProduct })
+    res.json({ action: 'Nova tarefa adicionada', tarefa: newTask })
 })
 
 // Updating a product by using PUT
-app.put('/products/:id', async (req, res) => {
-    const productId = req.params.id
+app.put('/task/:id', async (req, res) => {
+    const taskId = req.params.id
     const body = req.body
-    const updateProduct = await products.findByPk(productId)
-    updateProduct.update({
+    const updateTask = await task.findByPk(taskId)
+    updateTask.update({
         name: body.name,
-        description: body.description,
-        quantity: body.quantity,
-        price: body.price,
-        urlimg: body.urlimg,
-        nonmeat: body.nonmeat,
-        protein: body.protein,
-        sauce: body.sauce,
-        potatoes: body.potatoes,
-        drink: body.drink
+        descricao: body.descricao,
+        realizada: body.realizada
     })
 
-    res.send({ action: 'Updated Product', product: updateProduct })
+    res.send({ action: 'Tarefa modificada', product: updateTask })
 })
 
 // Delete a product
-app.delete('/products/:id', async (req, res) => {
-    const productId = req.params.id
-    const deletingProduct = await products.destroy({ where: { Id: productId } })
+app.delete('/task/:id', async (req, res) => {
+    const taskId = req.params.id
+    const deletingtask = await task.destroy({ where: { Id: taskId } })
 
-    res.send({ action: 'Deleted Product', productId: productId, productDeleted: deletingProduct })
+    res.send({ action: 'Deletando tarefa', tasktId: taskId, deletandotask: deletingtask })
 })
 
-app.post('/pedido', async (req, res) => {
-    const body = req.body
-
-    const newPedido = await pedido.create({
-
-
-        tomate: body.tomate,
-        cebola: body.cebola,
-        alface: body.alface,
-        cheedar: body.cheedar,
-        milho: body.milho,
-        batata_palha: body.batata_palha,
-        pepino_japones: body.pepino_japones,
-        carne: body.carne,
-        frango: body.frango,
-        calabresa: body.calabresa,
-        presunto: body.presunto,
-        bacon: body.bacon,
-        ovo: body.ovo,
-        batatas_fritas: body.batatas_fritas,
-        coca_cola_2l: body.coca_cola_2l,
-        coca_cola_350ml: body.coca_cola_350ml,
-        fanta_guarana_2l: body.fanta_guarana_2l,
-        fanta_laranja_2l: body.fanta_laranja_2l,
-        fanta_uva_2l: body.fanta_uva_2l,
-        sprite: body.sprite,
-        coca_cola_600ml: body.coca_cola_600ml,
-        mostarda: body.mostarda,
-        ketchup: body.ketchup,
-        maionese: body.maionese
-    })
-
-    res.json({ action: 'New Product Added', pedido: newPedido })
-})
 
 app.listen(8080, () => {
-    console.log('Starting ExpressJS in the 8081 port')
+    console.log('Starting ExpressJS in the 8080 port')
 })
